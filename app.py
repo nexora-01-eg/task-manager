@@ -2,22 +2,22 @@ from flask import Flask, request, jsonify
 from models import db, Task
 from schemas import task_schema, tasks_schema
 
-app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///tasks.db'
-db.init_app(app)
-
 ALLOWED_STATUSES = {'todo', 'doing', 'done'}
 ALLOWED_PRIORITIES = {'low', 'medium', 'high'}
 
-@app.route('/tasks', methods=['POST'])
-def create_task():
-    data = request.get_json()
-    
-    # Validate status and priority
+def validate_task_data(data):
     if data['status'] not in ALLOWED_STATUSES:
         return jsonify({'error': 'Invalid status'}), 422
     if data['priority'] not in ALLOWED_PRIORITIES:
         return jsonify({'error': 'Invalid priority'}), 422
+    return None
+
+@app.route('/tasks', methods=['POST'])
+def create_task():
+    data = request.get_json()
+    error = validate_task_data(data)
+    if error:
+        return error
     
     new_task = Task(title=data['title'], description=data['description'], status=data['status'], priority=data['priority'], due_date=data['due_date'])
     db.session.add(new_task)
@@ -40,11 +40,9 @@ def update_task(id):
     task = Task.query.get_or_404(id)
     data = request.get_json()
     
-    # Validate status and priority
-    if 'status' in data and data['status'] not in ALLOWED_STATUSES:
-        return jsonify({'error': 'Invalid status'}), 422
-    if 'priority' in data and data['priority'] not in ALLOWED_PRIORITIES:
-        return jsonify({'error': 'Invalid priority'}), 422
+    error = validate_task_data(data)
+    if error:
+        return error
     
     task.title = data.get('title', task.title)
     task.description = data.get('description', task.description)
