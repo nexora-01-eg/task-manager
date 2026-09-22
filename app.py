@@ -5,6 +5,13 @@ from schemas import task_schema, tasks_schema
 ALLOWED_STATUSES = {'todo', 'doing', 'done'}
 ALLOWED_PRIORITIES = {'low', 'medium', 'high'}
 
+def validate_task_data(data):
+    if data['status'] not in ALLOWED_STATUSES:
+        return jsonify({'error': f'Invalid status: {data["status"]}. Allowed statuses are: {", ".join(ALLOWED_STATUSES)}'}), 422
+    if data['priority'] not in ALLOWED_PRIORITIES:
+        return jsonify({'error': f'Invalid priority: {data["priority"]}. Allowed priorities are: {", ".join(ALLOWED_PRIORITIES)}'}), 422
+    return None
+
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///tasks.db'
 db.init_app(app)
