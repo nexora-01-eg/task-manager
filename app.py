@@ -12,6 +12,10 @@ def validate_task_data(data):
         return jsonify({'error': 'Invalid priority'}), 422
     return None
 
+app = Flask(__name__)
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///tasks.db'
+db.init_app(app)
+
 @app.route('/tasks', methods=['POST'])
 def create_task():
     data = request.get_json()
