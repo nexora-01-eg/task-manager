@@ -3,3 +3,4 @@ instance/
 
 # Ignore Python cache directories
 __pycache__/
+.aider*
