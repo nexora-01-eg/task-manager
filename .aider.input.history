@@ -86,3 +86,8 @@
 +Previous attempt failed (AGENT_ERROR). Address the errors below and retry minimally. Errors: 
 +
 +Project: python/none (tests: pytest). Plan: 1. inspect project (read-only, no edits); 2. implement requested change (minimal, scoped); 3. verify with build/tests if available. Keep changes scoped, do not touch secrets, run relevant checks. (attempt 3)
+
+# 2026-09-23 03:08:23.814613
++In test_app.py only: fix the tests to use only valid enum values (status todo/doing/done, priority low/medium/high) and make every test independent by cleaning the database before each test (function-scoped fixture with db cleanup). Do not touch app.py, models.py or schemas.py. Then run pytest until green.
++
++Project: python/none (tests: pytest). Plan: 1. inspect project (read-only, no edits); 2. inspect models + migrations; 3. design schema change; 4. implement change; 5. run relevant tests; 6. repair failures if any. Keep changes scoped, do not touch secrets, run relevant checks. (attempt 2)
