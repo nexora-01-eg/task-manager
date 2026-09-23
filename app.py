@@ -17,6 +17,16 @@ def validate_task_data(data):
         return jsonify({'error': 'Invalid due date format. Please use ISO format (YYYY-MM-DD)'}), 400
     return None
 
+def validate_page_and_per_page(page, per_page):
+    try:
+        page = int(page)
+        per_page = int(per_page)
+    except ValueError:
+        return jsonify({'error': 'page and per_page must be integers'}), 422
+    if page < 1 or per_page < 1:
+        return jsonify({'error': 'page and per_page must be greater than 0'}), 422
+    return None
+
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///tasks.db'
 db.init_app(app)
@@ -38,6 +48,12 @@ def get_tasks():
     q = request.args.get('q', type=str, default=None)
     status = request.args.get('status', type=str, default=None)
     priority = request.args.get('priority', type=str, default=None)
+    page = request.args.get('page', type=int, default=1)
+    per_page = request.args.get('per_page', type=int, default=10)
+
+    error = validate_page_and_per_page(page, per_page)
+    if error:
+        return error
 
     if status and status not in ALLOWED_STATUSES:
         return jsonify({'error': f'Invalid status: {status}. Allowed statuses are: {", ".join(ALLOWED_STATUSES)}'}), 422
@@ -52,9 +68,14 @@ def get_tasks():
     if priority and priority in ALLOWED_PRIORITIES:
         query = query.filter(Task.priority == priority)
 
-    tasks = query.all()
-    result = tasks_schema.dump(tasks)
-    return jsonify(result)
+    tasks = query.paginate(page=page, per_page=per_page, error_out=False)
+    result = tasks_schema.dump(tasks.items)
+    return jsonify({
+        'items': result,
+        'page': page,
+        'per_page': per_page,
+        'total': tasks.total
+    })
 
 @app.route('/tasks/<int:id>', methods=['GET'])
 def get_task(id):
