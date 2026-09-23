@@ -35,7 +35,19 @@ def create_task():
 
 @app.route('/tasks', methods=['GET'])
 def get_tasks():
-    tasks = Task.query.all()
+    q = request.args.get('q', type=str, default=None)
+    status = request.args.get('status', type=str, default=None)
+    priority = request.args.get('priority', type=str, default=None)
+
+    query = Task.query
+    if q:
+        query = query.filter((Task.title.ilike(f'%{q}%')) | (Task.description.ilike(f'%{q}%')))
+    if status and status in ALLOWED_STATUSES:
+        query = query.filter(Task.status == status)
+    if priority and priority in ALLOWED_PRIORITIES:
+        query = query.filter(Task.priority == priority)
+
+    tasks = query.all()
     result = tasks_schema.dump(tasks)
     return jsonify(result)
 
