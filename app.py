@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, send_from_directory
 from models import db, Task
 from schemas import task_schema, tasks_schema
 from datetime import datetime
@@ -30,6 +30,10 @@ def validate_page_and_per_page(page, per_page):
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///tasks.db'
 db.init_app(app)
+
+@app.route('/')
+def serve_index():
+    return send_from_directory('.', 'index.html')
 
 @app.route('/tasks', methods=['POST'])
 def create_task():
