@@ -39,6 +39,11 @@ def get_tasks():
     status = request.args.get('status', type=str, default=None)
     priority = request.args.get('priority', type=str, default=None)
 
+    if status and status not in ALLOWED_STATUSES:
+        return jsonify({'error': f'Invalid status: {status}. Allowed statuses are: {", ".join(ALLOWED_STATUSES)}'}), 422
+    if priority and priority not in ALLOWED_PRIORITIES:
+        return jsonify({'error': f'Invalid priority: {priority}. Allowed priorities are: {", ".join(ALLOWED_PRIORITIES)}'}), 422
+
     query = Task.query
     if q:
         query = query.filter((Task.title.ilike(f'%{q}%')) | (Task.description.ilike(f'%{q}%')))
