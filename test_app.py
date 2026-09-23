@@ -1,7 +1,7 @@
 import pytest
 from app import app, db, Task
 
-@pytest.fixture(scope='module')
+@pytest.fixture(scope='function')
 def client():
     with app.app_context():
         db.create_all()
@@ -13,7 +13,7 @@ def test_create_task(client):
     response = client.post('/tasks', json={
         'title': 'Test Task',
         'description': 'This is a test task.',
-        'status': 'pending',
+        'status': 'todo',
         'priority': 'high',
         'due_date': '2023-12-31'
     })
@@ -25,7 +25,7 @@ def test_get_tasks(client):
     client.post('/tasks', json={
         'title': 'Task 1',
         'description': 'First task.',
-        'status': 'completed',
+        'status': 'done',
         'priority': 'low',
         'due_date': '2023-11-30'
     })
@@ -38,7 +38,7 @@ def test_get_task(client):
     task_id = client.post('/tasks', json={
         'title': 'Task 2',
         'description': 'Second task.',
-        'status': 'pending',
+        'status': 'doing',
         'priority': 'medium',
         'due_date': '2023-12-01'
     }).get_json()['id']
@@ -51,14 +51,14 @@ def test_update_task(client):
     task_id = client.post('/tasks', json={
         'title': 'Task 3',
         'description': 'Third task.',
-        'status': 'pending',
+        'status': 'todo',
         'priority': 'high',
         'due_date': '2023-12-02'
     }).get_json()['id']
     response = client.put(f'/tasks/{task_id}', json={
         'title': 'Updated Task 3',
         'description': 'Updated description.',
-        'status': 'completed',
+        'status': 'done',
         'priority': 'low',
         'due_date': '2023-12-03'
     })
@@ -70,7 +70,7 @@ def test_delete_task(client):
     task_id = client.post('/tasks', json={
         'title': 'Task 4',
         'description': 'Fourth task.',
-        'status': 'pending',
+        'status': 'doing',
         'priority': 'medium',
         'due_date': '2023-12-04'
     }).get_json()['id']
