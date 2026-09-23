@@ -161,3 +161,8 @@
 +Add pagination to GET /tasks only: accept page and per_page query params (defaults 1 and 10, 422 on invalid values), combine with existing q/status/priority filters, return JSON object with items, page, per_page and total keys. Update index.html with Previous/Next buttons. Do not change other endpoints. Then run pytest until green.
 +
 +Project: python/none (tests: pytest). Plan: 1. inspect project (read-only, no edits); 2. identify backend framework; 3. design endpoints + schemas; 4. implement endpoints; 5. add validation + error handling; 6. add api tests. Keep changes scoped, do not touch secrets, run relevant checks. (attempt 3)
+
+# 2026-09-23 07:38:24.802399
++In app.py get_tasks only: add page and per_page query params defaulting to 1 and 10, return 422 JSON on invalid values, combine with existing filters, and return a JSON object with items, page, per_page and total keys. Change nothing else. Then run pytest.
++
++Project: python/none (tests: pytest). Plan: 1. inspect project (read-only, no edits); 2. inspect frontend structure; 3. implement UI change; 4. verify build/typecheck if available. Keep changes scoped, do not touch secrets, run relevant checks. (attempt 2)
