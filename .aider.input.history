@@ -141,3 +141,8 @@
 +Create only one new file index.html: a simple local task-manager page with vanilla JavaScript using fetch against this Flask API (GET /tasks list with q/status/priority query params, POST /tasks create, PUT /tasks/<id> update, DELETE /tasks/<id> delete). Include a search box and status/priority dropdowns. No CDN, no build step, no external services. Do not touch other files. Then run pytest.
 +
 +Project: python/none (tests: pytest). Plan: 1. inspect project (read-only, no edits); 2. identify backend framework; 3. design endpoints + schemas; 4. implement endpoints; 5. add validation + error handling; 6. add api tests. Keep changes scoped, do not touch secrets, run relevant checks. (attempt 2)
+
+# 2026-09-23 06:35:12.678494
++Delete exactly these two junk files: the file named 'Before running the tests, make sure you have installed the required packages' and the file named 'Run the tests using pytest'. Then append instance/ and __pycache__/ lines to .gitignore if missing. Change nothing else. Then run pytest.
++
++Project: python/none (tests: pytest). Plan: 1. inspect project (read-only, no edits); 2. implement requested change (minimal, scoped); 3. verify with build/tests if available. Keep changes scoped, do not touch secrets, run relevant checks. (attempt 2)
