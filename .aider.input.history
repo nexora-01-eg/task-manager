@@ -194,3 +194,8 @@
 +Two small fixes so the frontend actually works: (1) in app.py add a GET / route that serves index.html from the project folder using send_from_directory; (2) in index.html fix displayTasks to read the items array from the paginated API response object instead of iterating the response directly. Change nothing else. Then run pytest.
 +
 +Project: python/none (tests: pytest). Plan: 1. inspect project (read-only, no edits); 2. identify backend framework; 3. design endpoints + schemas; 4. implement endpoints; 5. add validation + error handling; 6. add api tests. Keep changes scoped, do not touch secrets, run relevant checks. (attempt 3)
+
+# 2026-09-23 09:06:28.438794
++Rewrite index.html only as a bilingual Arabic/English task manager page: a language toggle button switching all labels between Arabic (RTL layout, dir=rtl lang=ar) and English (LTR), task list with title/status/priority, add-task form, search box, status and priority dropdowns, Previous/Next pagination buttons, delete buttons per task, all using fetch against the existing Flask API which returns items/page/per_page/total. Vanilla JavaScript, inline CSS, no CDN, no external services. Do not touch other files. Then run pytest.
++
++Project: python/none (tests: pytest). Plan: 1. inspect project (read-only, no edits); 2. identify backend framework; 3. design endpoints + schemas; 4. implement endpoints; 5. add validation + error handling; 6. add api tests. Keep changes scoped, do not touch secrets, run relevant checks. (attempt 2)
