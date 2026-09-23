@@ -32,7 +32,7 @@ def test_get_tasks(client):
     response = client.get('/tasks')
     assert response.status_code == 200
     data = response.get_json()
-    assert len(data) == 1
+    assert len(data['items']) == 1
 
 def test_get_task(client):
     task_id = client.post('/tasks', json={
@@ -90,7 +90,7 @@ def test_text_search(client):
     response = client.get('/tasks?q=Search')
     assert response.status_code == 200
     data = response.get_json()
-    assert len(data) == 1
+    assert len(data['items']) == 1
 
 def test_status_filter(client):
     client.post('/tasks', json={
@@ -103,7 +103,7 @@ def test_status_filter(client):
     response = client.get('/tasks?status=done')
     assert response.status_code == 200
     data = response.get_json()
-    assert len(data) == 1
+    assert len(data['items']) == 1
 
 def test_priority_filter(client):
     client.post('/tasks', json={
@@ -116,7 +116,7 @@ def test_priority_filter(client):
     response = client.get('/tasks?priority=medium')
     assert response.status_code == 200
     data = response.get_json()
-    assert len(data) == 1
+    assert len(data['items']) == 1
 
 def test_combined_filter(client):
     client.post('/tasks', json={
@@ -129,7 +129,7 @@ def test_combined_filter(client):
     response = client.get('/tasks?q=Combined&status=done')
     assert response.status_code == 200
     data = response.get_json()
-    assert len(data) == 1
+    assert len(data['items']) == 1
 
 def test_invalid_status(client):
     response = client.get('/tasks?status=invalid')
