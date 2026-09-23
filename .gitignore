@@ -1,1 +1,5 @@
-.aider*
+# Ignore instance directory
+instance/
+
+# Ignore Python cache directories
+__pycache__/

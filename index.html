@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task Manager</title>
+</head>
+<body>
+    <h1>Task Manager</h1>
+    <input type="text" id="search-box" placeholder="Search tasks...">
+    <select id="status-dropdown">
+        <option value="">All Statuses</option>
+        <option value="todo">To Do</option>
+        <option value="doing">Doing</option>
+        <option value="done">Done</option>
+    </select>
+    <select id="priority-dropdown">
+        <option value="">All Priorities</option>
+        <option value="low">Low</option>
+        <option value="medium">Medium</option>
+        <option value="high">High</option>
+    </select>
+    <button onclick="fetchTasks()">Fetch Tasks</button>
+    <ul id="task-list"></ul>
+
+    <script>
+        async function fetchTasks() {
+            const searchBox = document.getElementById('search-box').value;
+            const statusDropdown = document.getElementById('status-dropdown').value;
+            const priorityDropdown = document.getElementById('priority-dropdown').value;
+
+            let url = '/tasks';
+            if (searchBox) url += `?q=${encodeURIComponent(searchBox)}`;
+            if (statusDropdown) url += `&status=${encodeURIComponent(statusDropdown)}`;
+            if (priorityDropdown) url += `&priority=${encodeURIComponent(priorityDropdown)}`;
+
+            try {
+                const response = await fetch(url);
+                const tasks = await response.json();
+                displayTasks(tasks);
+            } catch (error) {
+                console.error('Error fetching tasks:', error);
+            }
+        }
+
+        function displayTasks(tasks) {
+            const taskList = document.getElementById('task-list');
+            taskList.innerHTML = '';
+            tasks.forEach(task => {
+                const li = document.createElement('li');
+                li.textContent = `${task.title} - ${task.status} - ${task.priority}`;
+                taskList.appendChild(li);
+            });
+        }
+    </script>
+</body>
+</html>
