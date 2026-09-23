@@ -78,3 +78,67 @@ def test_delete_task(client):
     assert response.status_code == 200
     data = response.get_json()
     assert data['message'] == 'Task deleted'
+
+def test_text_search(client):
+    client.post('/tasks', json={
+        'title': 'Search Task',
+        'description': 'This task should be found.',
+        'status': 'todo',
+        'priority': 'high',
+        'due_date': '2023-12-31'
+    })
+    response = client.get('/tasks?q=Search')
+    assert response.status_code == 200
+    data = response.get_json()
+    assert len(data) == 1
+
+def test_status_filter(client):
+    client.post('/tasks', json={
+        'title': 'Status Task',
+        'description': 'This task should be found.',
+        'status': 'done',
+        'priority': 'low',
+        'due_date': '2023-11-30'
+    })
+    response = client.get('/tasks?status=done')
+    assert response.status_code == 200
+    data = response.get_json()
+    assert len(data) == 1
+
+def test_priority_filter(client):
+    client.post('/tasks', json={
+        'title': 'Priority Task',
+        'description': 'This task should be found.',
+        'status': 'todo',
+        'priority': 'medium',
+        'due_date': '2023-12-01'
+    })
+    response = client.get('/tasks?priority=medium')
+    assert response.status_code == 200
+    data = response.get_json()
+    assert len(data) == 1
+
+def test_combined_filter(client):
+    client.post('/tasks', json={
+        'title': 'Combined Task',
+        'description': 'This task should be found.',
+        'status': 'done',
+        'priority': 'low',
+        'due_date': '2023-11-30'
+    })
+    response = client.get('/tasks?q=Combined&status=done')
+    assert response.status_code == 200
+    data = response.get_json()
+    assert len(data) == 1
+
+def test_invalid_status(client):
+    response = client.get('/tasks?status=invalid')
+    assert response.status_code == 422
+
+def test_invalid_priority(client):
+    response = client.get('/tasks?priority=invalid')
+    assert response.status_code == 422
+
+def test_get_unknown_id(client):
+    response = client.get('/tasks/999')
+    assert response.status_code == 404
